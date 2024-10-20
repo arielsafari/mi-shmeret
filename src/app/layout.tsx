@@ -38,7 +38,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      dir={process.env.SITE_DIRECTION ?? "ltr"}
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
