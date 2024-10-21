@@ -1,4 +1,4 @@
-interface OnCallPerson {
+export default interface OnCallPerson {
   name: string;
   phoneNumber: string;
   voipNumber: string;

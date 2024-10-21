@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import OnCallPerson from "@/interfaces/on-call-person.interface";
 
 export default function OnCallDisplay(props: OnCallPerson) {
   const [isOpen, setIsOpen] = useState(false);

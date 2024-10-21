@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function ShiftsPage({ params }: { params: { group: string } }) {
   const startsAt = subHours(new Date(), 5);
   const endsAt = addHours(new Date(), 19);
-  const isShiftActive: boolean = false;
+  const isShiftActive: boolean = true;
 
   return (
     <>
@@ -34,24 +34,23 @@ export default function ShiftsPage({ params }: { params: { group: string } }) {
           <CardHeader>
             <CardTitle className="flex flex-row justify-between items-top text-lg">
               <span>סטטוס המשמרת הנוכחית</span>
-
-              {isShiftActive ? (
-                <CoolMode>
-                  <Button className="p-5 bg-green-600 hover:bg-green-500 font-bold text-lg">
-                    המשמרת פעילה!
-                  </Button>
-                </CoolMode>
-              ) : (
-                <Button
-                  variant="outline"
-                  className="p-5 text-white hover:text-white cursor-default bg-red-800/90 hover:bg-red-800/80 font-bold text-lg"
-                >
-                  המשמרת לא פעילה
-                </Button>
-              )}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-8">
+            {isShiftActive ? (
+              <CoolMode>
+                <Button className="w-full p-5 bg-green-600 hover:bg-green-500 font-bold text-lg">
+                  המשמרת פעילה!
+                </Button>
+              </CoolMode>
+            ) : (
+              <Button
+                variant="outline"
+                className="w-full p-5 text-white hover:text-white cursor-default bg-red-800/90 hover:bg-red-800/80 font-bold text-lg"
+              >
+                המשמרת לא פעילה
+              </Button>
+            )}
             <div className="flex flex-row gap-4 justify-between">
               <div>
                 <span className="flex gap-1">
