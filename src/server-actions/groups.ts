@@ -1,8 +1,7 @@
 import Group from "@/interfaces/group.interface";
 
 export async function getGroups() {
-  await new Promise(f => setTimeout(f, 3000));
-
+  // TODO: Load groups from the DB
   const groups: Group[] = [
     {
       name: "mador-946",
