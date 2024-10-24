@@ -67,6 +67,8 @@ export default function Layout({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="rounded-full">
+                {/* TODO: Add user from server */}
+                {/* TODO: Add fallback UI when there's no user logged in */}
                 <IconUserCircle className="mr-2 h-4 w-4" /> Ariel Yusim
               </Button>
             </DropdownMenuTrigger>
