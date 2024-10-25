@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Metadata } from "next";
 import OnCallDisplay from "../components/on-call-display";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";

@@ -1,8 +1,8 @@
 import Shift from "@/interfaces/shift.interface";
 import { Button } from "@/components/ui/button";
 import { CoolMode } from "@/components/ui/cool-mode";
-import CurrentShiftStatus from "../../components/current-shift-status";
-import CurrentShiftOnCall from "../../components/current-shift-on-call";
+import CurrentShiftStatus from "./current-shift-status";
+import CurrentShiftOnCall from "./current-shift-on-call";
 
 interface Props {
   currentShift: Shift;
