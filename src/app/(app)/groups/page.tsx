@@ -11,9 +11,12 @@ export const metadata: Metadata = {
 };
 
 // TODO: Add not-found global page
+// TODO: Add loading ui
+// TODO: Make sure all the pages and caching works after build
 
 export default async function GroupsPage() {
   const groups: Group[] = await getGroups();
+
   return (
     <>
       <div className="space-y-8 mb-8">

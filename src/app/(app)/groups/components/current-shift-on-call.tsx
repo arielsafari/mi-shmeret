@@ -3,12 +3,13 @@ import { Metadata } from "next";
 import OnCallDisplay from "../components/on-call-display";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
+import OnCallPerson from "@/interfaces/on-call-person.interface";
 
-export const metadata: Metadata = {
-  title: "Shift Registration",
-};
+interface Props {
+  onCallPeople: OnCallPerson[];
+}
 
-export default function CurrentShiftOnCall() {
+export default function CurrentShiftOnCall({ onCallPeople }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -18,14 +19,15 @@ export default function CurrentShiftOnCall() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          {/* TODO: Load on-call-person from the server */}
-          <OnCallDisplay
-            name="ישראל כהן"
-            phoneNumber="054-9029012"
-            voipNumber="1234"
-            avatarUrl="https://i.pravatar.cc/150"
-            isShadow={true}
-          />
+          {onCallPeople.map((person) => (
+            <OnCallDisplay
+              name={person.name}
+              phoneNumber={person.phoneNumber}
+              voipNumber={person.voipNumber}
+              avatarUrl={person.avatarUrl}
+              isShadow={person.isShadow}
+            />
+          ))}
 
           <Button variant="ghost" className="w-min mx-auto">
             {/* TODO: Create 'add new on-call person' logic */}

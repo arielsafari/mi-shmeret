@@ -1,26 +1,38 @@
 import { Metadata } from "next";
 
-import CurrentShiftStatus from "../components/current-shift-status";
-import CurrentShiftOnCall from "../components/current-shift-on-call";
+import { getCurrentShift } from "@/server-actions/shifts";
+import { getSingleGroup } from "@/server-actions/groups";
+import Shift from "@/interfaces/shift.interface";
+import Group from "@/interfaces/group.interface";
+import ActiveShift from "./components/active-shift";
+import NonActiveShift from "./components/non-active-shift";
 
 export const metadata: Metadata = {
   title: "Shift Registration",
 };
 
-export default function ShiftsPage({ params }: { params: { group: string } }) {
-  // TODO: Load group from the server
-  return (
-    <>
-      <div className="space-y-8 mb-8">
-        <h2 className="text-2xl font-bold tracking-tight">
-          קבוצת {params.group}
-        </h2>
-      </div>
+export default async function ShiftsPage({
+  params,
+}: {
+  params: { group: string };
+}) {
+  const currentGroup: Group = await getSingleGroup(params.group);
+  const currentShift: Shift = await getCurrentShift(params.group);
+  // TODO: Add refetching the currentShift every minute
+  const isShiftActive: boolean = !!currentShift;
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CurrentShiftStatus />
-        <CurrentShiftOnCall />
-      </div>
-    </>
+  return (
+    <div className="flex flex-col gap-8">
+      <h2 className="text-2xl font-bold tracking-tight">
+        קבוצת {currentGroup.displayName}
+      </h2>
+
+      {isShiftActive ? (
+        <ActiveShift currentShift={currentShift} />
+      ) : (
+        <NonActiveShift />
+      )}
+      <div dir="ltr">{JSON.stringify({ currentShift, currentGroup })}</div>
+    </div>
   );
 }

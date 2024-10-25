@@ -1,14 +1,26 @@
-import Group from "@/interfaces/group.interface";
+import db from "@/lib/db";
+import { GroupModel } from "@/models/group.model";
+import { unstable_cache } from "next/cache";
 
-export async function getGroups() {
-  // TODO: Load groups from the DB
-  const groups: Group[] = [
-    {
-      name: "mador-946",
-      displayName: "מדור 946",
-      imageSource: "/example-logo-1.png",
-    },
-  ];
+export const getGroups = unstable_cache(
+  async () => {
+    await db();
+    return await GroupModel.find();
+  },
+  ["groups"],
+  { revalidate: 3600, tags: ["groups"] }
+);
 
-  return groups;
-}
+export const getSingleGroup = unstable_cache(
+  async (groupName?: string) => {
+    await db();
+
+    const fieldsToFilter: { [k: string]: unknown } = {};
+    if (groupName) {
+      fieldsToFilter.name = groupName;
+    }
+    return await GroupModel.findOne(fieldsToFilter);
+  },
+  ["groups/single"],
+  { revalidate: 3600, tags: ["groups", "single"] }
+);
