@@ -6,6 +6,7 @@ import { ShiftDocument, ShiftModel } from "@/models/shift.model";
 import { getSingleGroup } from "./groups";
 import Group from "@/interfaces/group.interface";
 import { getTypedError } from "@/lib/utils";
+import OnCallPerson from "@/interfaces/on-call-person.interface";
 
 export const getShiftsOfGroup = unstable_cache(
   async (group: string) => {
@@ -34,7 +35,7 @@ export const getCurrentShift = unstable_cache(
     });
   },
   ["shifts/current"],
-  { revalidate: 60, tags: ["shifts/current"] }
+  { revalidate: 10, tags: ["shifts/current"] }
 );
 
 async function isShiftBisectsExistingShift(groupName: string, newShift: Shift) {
@@ -113,4 +114,43 @@ export async function updateCurrentShift(
   revalidateTag("shifts/current");
 
   return updateResult;
+}
+
+export async function addOnCallToCurrentShift(
+  groupName: string,
+  newOnCall: OnCallPerson
+) {
+  await db();
+  const currentShift: ShiftDocument = await getCurrentShift(groupName);
+  if (!currentShift) throw new Error("Can't update a non-existing shift");
+
+  currentShift.onCall.push(newOnCall);
+  currentShift.save();
+  revalidateTag("shifts/current");
+
+  return currentShift;
+}
+
+export async function updateOnCallToCurrentShift(
+  groupName: string,
+  updatedOnCall: OnCallPerson
+) {
+  await db();
+  const currentShift: ShiftDocument = await getCurrentShift(groupName);
+  if (!currentShift) throw new Error("Can't update a non-existing shift");
+
+  const personToUpdate = currentShift.onCall.find(
+    (person) => person.username === updatedOnCall.username
+  );
+  if (!personToUpdate)
+    throw new Error("Can't update a non-existing on call person");
+
+  currentShift.onCall = currentShift.onCall.map((person) =>
+    person.username === personToUpdate.username ? updatedOnCall : person
+  );
+
+  currentShift.save();
+  revalidateTag("shifts/current");
+
+  return currentShift;
 }

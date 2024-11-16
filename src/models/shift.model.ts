@@ -9,7 +9,6 @@ export const onCallPersonSchema = new Schema({
   name: String,
   phoneNumber: String,
   voipNumber: String,
-  avatarUrl: String,
   isShadow: Boolean,
 });
 

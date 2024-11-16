@@ -1,12 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import OnCallPerson from "@/interfaces/on-call-person.interface";
-import OnCallForm from "./on-call-form";
-
-export default function OnCallDisplay(props: OnCallPerson) {
+export default function OnCallDisplay(person: OnCallPerson) {
   return (
     <div
       className="
         p-2 
+        w-full
         border rounded-xl shadow-sm 
         flex items-center space-x-4 justify-between 
         bg-slate-100/50
@@ -15,27 +14,27 @@ export default function OnCallDisplay(props: OnCallPerson) {
     >
       <div className="flex flex-row gap-4 items-center ms-2">
         <Avatar className="size-12">
-          <AvatarImage src={props.avatarUrl} alt={props.name} />
+          <AvatarImage src="https://i.pravatar.cc/150" alt={person.fullName} />
           <AvatarFallback>
-            {props.name
+            {/* {person.fullName
               .split(" ")
               .map((n) => n[0])
-              .join("")}
+              .join("")} */}
           </AvatarFallback>
         </Avatar>
         <div className="text-gray-500 dark:text-white ">
           <span className="flex gap-1 items-baseline">
-            <span className="text-md font-bold">{props.name}</span>
-            {props.isShadow && (
+            <span className="text-md font-bold">{person.fullName}</span>
+            {person.isShadow && (
               <span className="text-sm text-muted-foreground">(משמרתן צל)</span>
             )}
           </span>
-          <p className="text-sm">{props.phoneNumber}</p>
-          <p className="text-sm">VoIP - {props.voipNumber}</p>
+          <p className="text-sm">{person.phoneNumber}</p>
+          <p className="text-sm">VoIP - {person.voipNumber}</p>
         </div>
       </div>
 
-      <OnCallForm {...props} />
+      {/* TODO: Allow editing on-call person */}
     </div>
   );
 }

@@ -5,16 +5,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { group: string } }
+  props: { params: Promise<{ group: string }> }
 ) {
+  const params = await props.params;
   const currentShift = (await getCurrentShift(params.group)) ?? {};
   return NextResponse.json(currentShift);
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { group: string } }
+  props: { params: Promise<{ group: string }> }
 ) {
+  const params = await props.params;
   const updatedShift: Shift = await request.json();
 
   try {

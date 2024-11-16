@@ -10,29 +10,28 @@ interface Props {
 
 export default function CurrentShiftOnCall({ onCallPeople }: Props) {
   return (
-    <Card>
+    <Card className="p-0 border border-border">
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-top text-lg">
-          מי במשמרת?
+          <span>מי במשמרת?</span>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-4">
-          {onCallPeople.map((person) => (
-            <OnCallDisplay
-              name={person.name}
-              phoneNumber={person.phoneNumber}
-              voipNumber={person.voipNumber}
-              avatarUrl={person.avatarUrl}
-              isShadow={person.isShadow}
-            />
-          ))}
+      <CardContent className="grid grid-cols-2 items-center justify-items-center gap-5">
+        {onCallPeople.map((person) => (
+          <OnCallDisplay
+            key={person.username}
+            username={person.username}
+            fullName={person.fullName}
+            phoneNumber={person.phoneNumber}
+            voipNumber={person.voipNumber}
+            isShadow={person.isShadow}
+          />
+        ))}
 
-          <Button variant="ghost" className="w-min mx-auto">
-            {/* TODO: Create 'add new on-call person' logic */}
-            עוד אחד <IconPlus />
-          </Button>
-        </div>
+        <Button variant="ghost" className="w-min mx-auto">
+          {/* TODO: Create 'add new on-call person' logic */}
+          עוד אחד <IconPlus />
+        </Button>
       </CardContent>
     </Card>
   );

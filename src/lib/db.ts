@@ -1,5 +1,3 @@
-// lib/dbConnect.tsx
-
 import type _mongoose from "mongoose";
 import { connect } from "mongoose";
 

@@ -1,7 +1,7 @@
 export default interface OnCallPerson {
-  name: string;
+  username: string;
+  fullName: string;
   phoneNumber: string;
   voipNumber: string;
-  avatarUrl: string;
   isShadow: boolean;
 }

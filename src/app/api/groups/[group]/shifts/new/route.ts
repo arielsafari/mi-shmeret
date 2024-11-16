@@ -5,8 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { group: string } }
+  props: { params: Promise<{ group: string }> }
 ) {
+  const params = await props.params;
   const shift: Shift = await request.json();
 
   try {

@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { BGGrid } from "@/components/bg-grid";
+import { heeboFont, rubikFont } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Mi Shmeret",
@@ -42,17 +33,18 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       dir={process.env.SITE_DIRECTION ?? "ltr"}
+      className={`${rubikFont.variable} ${heeboFont.variable} antialiased`}
     >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <BGGrid>{children}</BGGrid>
+
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>
