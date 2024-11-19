@@ -11,32 +11,30 @@ import {
 } from "@/components/ui/dialog";
 import OnCallPerson from "@/interfaces/on-call-person.interface";
 import OnCallDialogForm from "./on-call-dialog-form";
+import { useGroupContext } from "../group.context";
+import { handlePersonMutation } from "../actions";
 
 interface Props {
   onCallPerson?: OnCallPerson;
-  dialogTrigger: React.ReactNode;
-  // onSubmit: (person: OnCallPerson) => void;
+  children: React.ReactNode;
 }
 
-export default function OnCallDialog({
-  onCallPerson,
-  dialogTrigger,
-}: // onSubmit,
-Props) {
+export default function OnCallDialog({ onCallPerson, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const { currentShift } = useGroupContext();
+  const handleSubmit = async (updatedPerson: OnCallPerson) => {
+    if (!currentShift) return;
 
-  const handleSubmit = (person: OnCallPerson) => {
-    // TODO: Call the server action
-    console.log({ person });
+    await handlePersonMutation(currentShift, updatedPerson);
     setIsOpen(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{dialogTrigger}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-h-[calc(100vh-40px)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>ערוך את המשמרתן</DialogTitle>
+          <DialogTitle>משמרתן</DialogTitle>
           <DialogDescription />
         </DialogHeader>
 

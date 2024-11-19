@@ -6,7 +6,8 @@ export interface ShiftDocument extends Document, Omit<Shift, "groupName"> {
 }
 
 export const onCallPersonSchema = new Schema({
-  name: String,
+  username: String,
+  fullName: String,
   phoneNumber: String,
   voipNumber: String,
   isShadow: Boolean,

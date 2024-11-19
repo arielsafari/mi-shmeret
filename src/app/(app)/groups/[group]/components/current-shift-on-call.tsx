@@ -3,6 +3,8 @@ import OnCallDisplay from "../components/on-call-display";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import OnCallPerson from "@/interfaces/on-call-person.interface";
+import OnCallDialog from "./on-call-dialog";
+import clsx from "clsx";
 
 interface Props {
   onCallPeople: OnCallPerson[];
@@ -16,22 +18,27 @@ export default function CurrentShiftOnCall({ onCallPeople }: Props) {
           <span>מי במשמרת?</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 items-center justify-items-center gap-5">
+      <CardContent
+        className={clsx(
+          "grid grid-cols-1 items-center justify-items-center gap-5",
+          {
+            "grid-cols-2": onCallPeople.length > 0,
+          }
+        )}
+      >
         {onCallPeople.map((person) => (
           <OnCallDisplay
             key={person.username}
-            username={person.username}
-            fullName={person.fullName}
-            phoneNumber={person.phoneNumber}
-            voipNumber={person.voipNumber}
-            isShadow={person.isShadow}
+            person={person}
           />
         ))}
 
-        <Button variant="ghost" className="w-min mx-auto">
-          {/* TODO: Create 'add new on-call person' logic */}
-          עוד אחד <IconPlus />
-        </Button>
+        <OnCallDialog>
+          <Button variant="ghost">
+            {onCallPeople.length > 0 ? "עוד אחד" : "הוסף משמרתן"}
+            <IconPlus className="ms-2 size-4" />
+          </Button>
+        </OnCallDialog>
       </CardContent>
     </Card>
   );

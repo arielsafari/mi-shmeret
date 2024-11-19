@@ -1,42 +1,36 @@
-import { revalidateTag, unstable_cache } from "next/cache";
+"use server";
 
 import db from "@/lib/db";
 import Shift from "@/interfaces/shift.interface";
 import { ShiftDocument, ShiftModel } from "@/models/shift.model";
 import { getSingleGroup } from "./groups";
-import Group from "@/interfaces/group.interface";
 import { getTypedError } from "@/lib/utils";
-import OnCallPerson from "@/interfaces/on-call-person.interface";
 
-export const getShiftsOfGroup = unstable_cache(
-  async (group: string) => {
-    await db();
-    return await ShiftModel.find().populate({
+export async function getShiftsOfGroup(group: string) {
+  await db();
+
+  return await ShiftModel.find()
+    .lean<Shift[]>()
+    .populate({
       path: "group",
       match: { name: group },
     });
-  },
-  ["shifts"],
-  { revalidate: 60, tags: ["shifts"] }
-);
+}
 
-export const getCurrentShift = unstable_cache(
-  async (group: string) => {
-    await db();
-    const now = new Date();
+export async function getCurrentShift(group: string) {
+  await db();
+  const now = new Date();
 
-    return await ShiftModel.findOne({
-      startsAt: { $lte: now },
-      endsAt: { $gte: now },
-    }).populate({
+  return await ShiftModel.findOne({
+    startsAt: { $lte: now },
+    endsAt: { $gte: now },
+  })
+    .lean<Shift>()
+    .populate({
       path: "group",
       match: { name: group },
-      select: [],
     });
-  },
-  ["shifts/current"],
-  { revalidate: 10, tags: ["shifts/current"] }
-);
+}
 
 async function isShiftBisectsExistingShift(groupName: string, newShift: Shift) {
   // Check weather the new shift bisects one of the existing shifts.
@@ -56,18 +50,20 @@ async function isShiftBisectsExistingShift(groupName: string, newShift: Shift) {
     match: { name: groupName },
   });
 
-  if (startIsBisecting.length !== 0 || endIsBisecting.length !== 0) return true;
-
-  return false;
+  return startIsBisecting.length !== 0 || endIsBisecting.length !== 0;
 }
 
 export async function createShift(newShift: Shift) {
-  const currentGroup: Group = await getSingleGroup(newShift.groupName);
+  const currentGroup = await getSingleGroup(newShift.groupName);
 
   if (!currentGroup)
     throw new Error(`The group ${newShift.groupName} doesn't exists`);
 
-  const shift = new ShiftModel({ ...newShift, group: currentGroup });
+  const shift: ShiftDocument = new ShiftModel({
+    ...newShift,
+    group: currentGroup,
+  });
+
   try {
     await shift.validate();
   } catch (untypedError) {
@@ -85,9 +81,7 @@ export async function createShift(newShift: Shift) {
     throw new Error("The new shift bisects an existing shift");
 
   await shift.save();
-  revalidateTag("shifts/current");
-
-  return shift;
+  return shift.toJSON();
 }
 
 export async function updateCurrentShift(
@@ -95,62 +89,28 @@ export async function updateCurrentShift(
   updatedShift: Shift
 ) {
   await db();
-  const now = new Date();
 
-  const updateResult = await ShiftModel.findOneAndUpdate(
-    {
-      startsAt: { $lte: now },
-      endsAt: { $gte: now },
-    },
-    { ...updatedShift },
-    { new: true, useFindAndModify: false }
-  ).populate({
+  const currentShift = await getCurrentShift(groupName);
+
+  if (!currentShift)
+    throw new Error(
+      `There's no current shift for group '${groupName}' at the moment.`
+    );
+
+  const currentShiftModel: ShiftDocument = await ShiftModel.findOne({
+    startsAt: currentShift.startsAt,
+    endsAt: currentShift.endsAt,
+  }).populate({
     path: "group",
     match: { name: groupName },
   });
 
+  currentShiftModel.startsAt = updatedShift.startsAt;
+  currentShiftModel.endsAt = updatedShift.endsAt;
+  currentShiftModel.onCall = updatedShift.onCall;
+
+  const updateResult = await currentShiftModel.save();
   if (!updateResult) throw new Error("Can't update a non-existing shift");
 
-  revalidateTag("shifts/current");
-
-  return updateResult;
-}
-
-export async function addOnCallToCurrentShift(
-  groupName: string,
-  newOnCall: OnCallPerson
-) {
-  await db();
-  const currentShift: ShiftDocument = await getCurrentShift(groupName);
-  if (!currentShift) throw new Error("Can't update a non-existing shift");
-
-  currentShift.onCall.push(newOnCall);
-  currentShift.save();
-  revalidateTag("shifts/current");
-
-  return currentShift;
-}
-
-export async function updateOnCallToCurrentShift(
-  groupName: string,
-  updatedOnCall: OnCallPerson
-) {
-  await db();
-  const currentShift: ShiftDocument = await getCurrentShift(groupName);
-  if (!currentShift) throw new Error("Can't update a non-existing shift");
-
-  const personToUpdate = currentShift.onCall.find(
-    (person) => person.username === updatedOnCall.username
-  );
-  if (!personToUpdate)
-    throw new Error("Can't update a non-existing on call person");
-
-  currentShift.onCall = currentShift.onCall.map((person) =>
-    person.username === personToUpdate.username ? updatedOnCall : person
-  );
-
-  currentShift.save();
-  revalidateTag("shifts/current");
-
-  return currentShift;
+  return updateResult.toJSON();
 }

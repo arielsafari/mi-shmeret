@@ -48,3 +48,5 @@ This project allows you to keep track of the On-Call person for today.
 ## Deployment
 
 The simplest method to deploy the project is to use a docker image, and run in on some docker swarm (like Openshift or Kubernetes)
+
+The Dockerfile in this project can be used to deploy the app.
