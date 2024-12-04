@@ -9,7 +9,6 @@ export default function ShiftSection() {
   const { currentShift } = useGroupContext();
 
   if (!currentShift) {
-    // TODO: make sure non-active shift is displayed correctly.
     return <NonActiveShift />;
   }
 

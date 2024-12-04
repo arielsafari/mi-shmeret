@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-
 import { getCurrentShift } from "@/server-actions/shifts";
 import { getSingleGroup } from "@/server-actions/groups";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,18 @@ import { notFound } from "next/navigation";
 import { GroupContextProvider } from "./group.context";
 import ShiftSection from "./components/shift-section";
 
-export const metadata: Metadata = {
-  title: "Shift Registration",
-};
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(
+  params: Promise<{ group: string }>
+): Promise<Metadata> {
+  const group = (await params).group;
+  const currentGroup = await getSingleGroup(group);
+
+  return {
+    title: currentGroup?.displayName,
+  };
+}
 
 export default async function ShiftsPage(props: {
   params: Promise<{ group: string }>;

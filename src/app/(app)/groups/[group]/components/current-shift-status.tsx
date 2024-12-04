@@ -17,7 +17,6 @@ interface Props {
 export default function CurrentShiftStatus({ currentShift }: Props) {
   return (
     <Card className="flex flex-row p-0 items-center overflow-hidden border border-border">
-      {/* TODO: Export this template into a component */}
       <CardHeader className="p-5 flex justify-center items-center bg-accent/50 border-e">
         <CardTitle className="text-md font-normal">המשמרת הנוכחית</CardTitle>
         <CoolMode>

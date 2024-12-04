@@ -15,9 +15,7 @@ export const metadata: Metadata = {
   title: "קבוצות",
 };
 
-// TODO: Add not-found global page
-// TODO: Add loading ui
-// TODO: Make sure all the pages and caching works after build
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const groups: Group[] = await getGroups();

@@ -3,6 +3,8 @@ import { getTypedError } from "@/lib/utils";
 import { getCurrentShift, updateCurrentShift } from "@/server-actions/shifts";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _request: NextRequest,
   props: { params: Promise<{ group: string }> }

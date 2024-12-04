@@ -3,6 +3,8 @@ import { getTypedError } from "@/lib/utils";
 import { createShift } from "@/server-actions/shifts";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(
   request: NextRequest,
   props: { params: Promise<{ group: string }> }

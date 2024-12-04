@@ -17,6 +17,8 @@ import { Separator } from "@/components/ui/separator";
 import { Upload } from "lucide-react";
 import { DownloadTableCSV } from "../../components/download-table-csv";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "העלאת כמות גדולה של שתיות",
 };
@@ -88,6 +90,7 @@ export default async function UploadPage(props: {
         </CardHeader>
 
         <CardContent>
+          {/* TODO: Load targets from backend */}
           <TargetsTable targets={targets} />
         </CardContent>
 

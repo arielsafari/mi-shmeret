@@ -10,6 +10,7 @@ import { DownloadCSVTemplate } from "./components/download-csv-template";
 // export const metadata: Metadata = {
 //   title: "העלאת כמות גדולה של שתיות",
 // };
+export const dynamic = "force-dynamic";
 
 export default function BulkDrinkUploadPage() {
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);

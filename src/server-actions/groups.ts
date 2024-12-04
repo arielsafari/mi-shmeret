@@ -6,7 +6,7 @@ import Group from "@/interfaces/group.interface";
 
 export async function getGroups() {
   await db();
-  return await GroupModel.find().lean<Group>();
+  return await GroupModel.find().lean<Group[]>();
 }
 
 export async function getSingleGroup(groupName?: string) {
@@ -16,5 +16,5 @@ export async function getSingleGroup(groupName?: string) {
   if (groupName) {
     fieldsToFilter.name = groupName;
   }
-  return await GroupModel.findOne(fieldsToFilter);
+  return await GroupModel.findOne(fieldsToFilter).lean<Group>();
 }
