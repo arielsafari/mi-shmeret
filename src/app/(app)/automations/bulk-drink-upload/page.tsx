@@ -24,6 +24,7 @@ export default function BulkDrinkUploadPage() {
           : `${files.length} קבצים הועלו בהצלחה`;
       setUploadStatus(status);
       // TODO: Send the files to the backend and validate
+      // TODO: After validation, create new upload with the uploaded targets
       // TODO: If success, redirect to the /upload/[id] page
     }, 2000);
   };
@@ -48,6 +49,7 @@ export default function BulkDrinkUploadPage() {
       </div>
 
       <FileDropzone onUpload={handleUpload} />
+
       {uploadStatus && (
         <div className="text-center text-sm text-muted-foreground">
           <div>{uploadStatus}</div>

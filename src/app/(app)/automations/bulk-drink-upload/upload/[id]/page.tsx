@@ -14,7 +14,7 @@ import TargetsTable from "../../components/targets-table";
 import { Badge } from "@/components/ui/badge";
 import { targets } from "./mock-data";
 import { Separator } from "@/components/ui/separator";
-import { Upload } from "lucide-react";
+import { Trash, Upload } from "lucide-react";
 import { DownloadTableCSV } from "../../components/download-table-csv";
 
 export const dynamic = "force-dynamic";
@@ -71,8 +71,23 @@ export default async function UploadPage(props: {
             </CardDescription>
           </div>
 
-          <DownloadTableCSV targets={targets} />
-          {/* TODO: Add cancel upload button */}
+          <div className="flex flex-row gap-2 justify-center">
+            <DownloadTableCSV targets={targets} />
+            {/* TODO: Add cancel upload logic */}
+
+            <Button
+              variant="destructive"
+              className="bg-red-700 hover:bg-red-600"
+            >
+              <Trash
+                className="-ms-1 me-2 opacity-60"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              ביטול העלאה
+            </Button>
+          </div>
         </CardHeader>
 
         <Separator />
