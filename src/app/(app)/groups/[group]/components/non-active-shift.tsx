@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-export default async function NonActiveShift() {
+export default function NonActiveShift() {
   return (
     <div className="flex flex-col gap-8">
       <Button
