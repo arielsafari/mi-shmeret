@@ -31,17 +31,17 @@ export default async function UploadPage(props: {
   const currentStatus = "doneUploading";
   const listStatuses = {
     validation: (
-      <Badge className="text-lg rounded-full bg-yellow-700 hover:bg-yellow-600">
+      <Badge className="text-lg rounded-full bg-yellow-700 hover:bg-yellow-600 dark:text-white">
         וילדוץ לפני העלאה
       </Badge>
     ),
     uploading: (
-      <Badge className="text-lg rounded-full bg-cyan-700 hover:bg-cyan-600">
+      <Badge className="text-lg rounded-full bg-cyan-700 hover:bg-cyan-600 dark:text-white">
         בהעלאה...
       </Badge>
     ),
     doneUploading: (
-      <Badge className="text-lg rounded-full bg-green-700 hover:bg-green-600">
+      <Badge className="text-lg rounded-full bg-green-700 hover:bg-green-600 dark:text-white">
         כל היעדים הועלו
       </Badge>
     ),
@@ -116,7 +116,7 @@ export default async function UploadPage(props: {
             <span>סה״כ יעדים להעלאה</span>
             <Badge className="text-md">{targets.length}</Badge>
           </span>
-          <Button className="group bg-green-700 hover:bg-green-600 text-lg">
+          <Button className="group bg-green-700 hover:bg-green-600 text-lg dark:text-white">
             העלה את היעדים
             <Upload
               className="-me-1 ms-2 opacity-60 transition-transform group-hover:-translate-y-0.5"

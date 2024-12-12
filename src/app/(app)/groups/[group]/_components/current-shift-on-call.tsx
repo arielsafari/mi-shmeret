@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import OnCallDisplay from "../components/on-call-display";
+import OnCallDisplay from "./on-call-display";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import OnCallPerson from "@/interfaces/on-call-person.interface";
@@ -27,10 +27,7 @@ export default function CurrentShiftOnCall({ onCallPeople }: Props) {
         )}
       >
         {onCallPeople.map((person) => (
-          <OnCallDisplay
-            key={person.username}
-            person={person}
-          />
+          <OnCallDisplay key={person.username} person={person} />
         ))}
 
         <OnCallDialog>

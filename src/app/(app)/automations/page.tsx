@@ -1,7 +1,9 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,7 +21,13 @@ export const automations: { name: string; displayName: string }[] = [
   { name: "bulk-drink-upload", displayName: "העלאת כמות גדולה של שתיות" },
 ];
 
-export default async function AutomationsPage() {
+interface Props {
+  collapsed: boolean;
+}
+
+export default async function AutomationsPage({ collapsed = false }: Props) {
+  const automationsPerRow = 2;
+
   return (
     <Card>
       <CardHeader>
@@ -44,6 +52,13 @@ export default async function AutomationsPage() {
           ))}
         </div>
       </CardContent>
+      {collapsed && automations.length > automationsPerRow && (
+        <CardFooter className="flex justify-center">
+          <Button variant="default" asChild>
+            <Link href="/automations">צפה בכל האוטומציות</Link>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

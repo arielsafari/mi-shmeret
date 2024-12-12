@@ -14,19 +14,40 @@ export const dynamic = "force-dynamic";
 
 export default function BulkDrinkUploadPage() {
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleUpload = (files: File[]) => {
+  const handleSubmit = async (files: File[]) => {
     setUploadStatus("מעלה...");
-    setTimeout(() => {
+    let isValid = true;
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(
+        "/api/automations/bulk-drink-upload/validate-csv",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        isValid = false;
+        const result = await response.json();
+        setErrorMessage(result.error || result.message);
+      }
+    }
+
+    if (isValid) {
       const status =
         files.length === 1
           ? "קובץ 1 הועלה בהצלחה"
           : `${files.length} קבצים הועלו בהצלחה`;
       setUploadStatus(status);
-      // TODO: Send the files to the backend and validate
-      // TODO: After validation, create new upload with the uploaded targets
-      // TODO: If success, redirect to the /upload/[id] page
-    }, 2000);
+    }
+    // TODO: After validation, create new upload with the uploaded targets
+    // TODO: If success, redirect to the /upload/[id] page
   };
 
   return (
@@ -48,13 +69,13 @@ export default function BulkDrinkUploadPage() {
         <DownloadCSVTemplate />
       </div>
 
-      <FileDropzone onUpload={handleUpload} />
+      <FileDropzone onUpload={handleSubmit} />
 
       {uploadStatus && (
         <div className="text-center text-sm text-muted-foreground">
           <div>{uploadStatus}</div>
 
-          {/* TODO: Add error state */}
+          {errorMessage && <span className="text-red-600">{errorMessage}</span>}
         </div>
       )}
     </div>

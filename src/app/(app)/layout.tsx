@@ -1,6 +1,4 @@
-import { Footer } from "@/components/layout/footer";
-import { IconShieldCheckFilled } from "@tabler/icons-react";
-import Link from "next/link";
+import Navbar from "@/components/layout/navbar";
 
 export default function Layout({
   children,
@@ -8,18 +6,12 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="container mx-auto flex max-w-[calc(65ch+100px)] min-h-screen gap-10 flex-col justify-between px-2 py-4 md:px-4 md:py-8">
+    <div className="container mx-auto flex max-w-screen-lg min-h-screen gap-10 flex-col justify-between px-2 py-4 pt-8">
       <main className="flex flex-col gap-10">
-        <header className="flex align-center justify-center">
-          <Link href="/" className="flex items-center gap-2 font-cal">
-            <IconShieldCheckFilled className="size-7 fill-black dark:fill-white" />
-            <span className="text-3xl font-mono font-semibold">מי שמרת</span>
-          </Link>
-        </header>
+        <Navbar />
 
         {children}
       </main>
-      <Footer />
     </div>
   );
 }
